@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Register</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .navbar-brand {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 500px;
+      margin-top: 50px;
+    }
+    .card {
+      padding: 20px;
+    }
+    .card-header {
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-align: center;
+    }
+    .nav-link.btn {
+      margin-left: 10px;
+    }
+    .btn-outline-primary.text-blue {
+      color: white !important;
+      border-color: #007bff;
+    }
+    .btn-outline-primary.text-blue:hover {
+      background-color: #007bff;
+      color: white;
+    }
+    .btn-outline-grey {
+      color: grey;
+      border-color: grey;
+    }
+    .btn-outline-grey:hover {
+      background-color: grey;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">TicketFast3r</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link btn btn-outline-primary text-blue" href="/">Home</a>
+      </li>
+      <li class="nav-item" sec:authorize="!isFullyAuthenticated()">
+        <a class="nav-link btn btn-outline-primary text-blue" href="/login">Login</a>
+      </li>
+      <li class="nav-item" sec:authorize="isFullyAuthenticated()">
+        <form th:action="@{/logout}" method="post" class="form-inline">
+          <button type="submit" class="btn btn-outline-danger">Logout</button>
+        </form>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      Register
+    </div>
+    <div class="card-body">
+      <form th:action="@{/register}" th:object="${user}" method="post">
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input type="text" class="form-control" id="username" th:field="*{username}" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" class="form-control" id="password" th:field="*{password}" required>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

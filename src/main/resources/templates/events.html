@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Upcoming Events</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .navbar-brand {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .card {
+            max-width: 500px;
+            margin: auto;
+        }
+        .card-footer {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .nav-link.btn, .form-inline .btn, .btn-favorites, .btn-outline-primary, .btn-outline-grey, .btn-remove {
+            width: 120px;
+            height: 40px;
+        }
+        .nav-link.btn {
+            margin-left: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .form-inline .btn {
+            margin-left: 10px;
+        }
+        .btn-favorites, .btn-outline-primary:hover, .btn-outline-grey:hover, .btn-remove:hover {
+            color: white;
+        }
+        .btn-favorites {
+            background-color: #007bff;
+            color: white !important;
+        }
+        .btn-favorites:hover {
+            background-color: #0056b3;
+        }
+        .btn-outline-primary {
+            color: white !important;
+            border-color: #007bff;
+        }
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+        }
+        .btn-outline-grey {
+            color: white !important;
+            border-color: grey;
+        }
+        .btn-outline-grey:hover {
+            background-color: grey;
+        }
+        .btn-add-favorites {
+            background-color: white;
+            width: 150px;
+            color: #007bff !important;
+        }
+        .btn-add-favorites:hover {
+            color: white !important;
+        }
+        .btn-remove {
+            margin-top: 10px;
+            background-color: red;
+            border-color: red;
+        }
+        .btn-remove:hover {
+            background-color: red;
+        }
+        .center {
+            text-align: center;
+        }
+        .btn-logout {
+            color: red !important;
+            border-color: red;
+        }
+        .btn-logout:hover {
+            color: white !important;
+            background-color: red;
+        }
+        .white-text {
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">TicketFast3r</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item" sec:authorize="!isFullyAuthenticated()">
+                <a class="nav-link btn btn-outline-primary" href="/login">Login</a>
+            </li>
+            <li class="nav-item" sec:authorize="!isFullyAuthenticated()">
+                <a class="nav-link btn btn-outline-grey" href="/register">Register</a>
+            </li>
+            <li class="nav-item" sec:authorize="isFullyAuthenticated()">
+                <a class="nav-link btn btn-outline-primary" href="/favorite/events">Favorites</a>
+            </li>
+            <li class="nav-item" sec:authorize="isFullyAuthenticated()">
+                <a class="nav-link btn btn-outline-primary" href="/history">Recent Results</a>
+            </li>
+            <li class="nav-item" sec:authorize="isFullyAuthenticated()">
+                <form th:action="@{/logout}" method="post" class="form-inline">
+                    <button type="submit" class="btn btn-outline-danger nav-link white-text">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h1 class="center">Upcoming Events</h1>
+    <p class="center">Welcome, <span th:text="${username}">User</span>!</p>
+
+    <div class="row">
+        <div class="col-md-6 mb-3" th:each="event : ${events}">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${event.eventName}">Event Name</h5>
+                    <p class="card-text mb-1" th:text="${#dates.format(event.dateTime, 'dd MMM yyyy')}">Event Date</p>
+                    <p class="card-text mb-1" th:text="${event.venueName}">Venue Name</p>
+                    <p class="card-text mb-1" th:text="${event.city}">City</p>
+                    <p class="card-text mb-3" th:text="${event.genre}">Genre</p>
+                </div>
+                <div class="card-footer" sec:authorize="isFullyAuthenticated()">
+                    <form th:action="@{/events/favorite}" method="post">
+                        <input type="hidden" name="eventId" th:value="${event.id}">
+                        <input type="hidden" name="eventName" th:value="${event.eventName}">
+                        <input type="hidden" name="venueName" th:value="${event.venueName}">
+                        <input type="hidden" name="city" th:value="${event.city}">
+                        <input type="hidden" name="genre" th:value="${event.genre}">
+                        <input type="hidden" name="dateTime" th:value="${event.dateTime}">
+                        <button type="submit" class="btn btn-outline-primary btn-add-favorites">Add to Favorites</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
